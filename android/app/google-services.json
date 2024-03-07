@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "79778168609",
+    "project_id": "fir-crud-operation-50e33",
+    "storage_bucket": "fir-crud-operation-50e33.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:79778168609:android:edb69a47eb52bd74b68860",
+        "android_client_info": {
+          "package_name": "com.savani.firebase_crud_operation"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuh7xR8kKyXFovMP7R84qbBQG4u-xlUqw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
