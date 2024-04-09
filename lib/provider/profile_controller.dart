@@ -7,8 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-class ProfileController with ChangeNotifier{
-
+class ProfileController with ChangeNotifier {
   final _formKey = GlobalKey<FormState>();
 
   TextEditingController firstNameController = TextEditingController();
@@ -18,33 +17,35 @@ class ProfileController with ChangeNotifier{
   FocusNode lastNameFocusNode = FocusNode();
 
   DatabaseReference ref = FirebaseDatabase.instance.ref().child("Users");
-  firebase_storage.FirebaseStorage storage  = firebase_storage.FirebaseStorage.instance;
+  firebase_storage.FirebaseStorage storage =
+      firebase_storage.FirebaseStorage.instance;
 
   final picker = ImagePicker();
 
-
   File? _image;
+
   File? get image => _image;
 
   bool _loading = false;
+
   bool get loading => _loading;
 
-  setLoading(bool value){
+  setLoading(bool value) {
     _loading = value;
     notifyListeners();
   }
 
-  void pickImage(context){
+  void pickImage(context) {
     showDialog(
         context: context,
-        builder: (BuildContext context){
-          return  AlertDialog(
+        builder: (BuildContext context) {
+          return AlertDialog(
             content: Wrap(
               children: [
                 ListTile(
                   title: const Text("Camera"),
                   leading: const Icon(Icons.camera_alt_outlined),
-                  onTap: (){
+                  onTap: () {
                     pickCameraImage(context);
                     Navigator.pop(context);
                   },
@@ -52,7 +53,7 @@ class ProfileController with ChangeNotifier{
                 ListTile(
                   title: const Text("Gallery"),
                   leading: const Icon(Icons.image_outlined),
-                  onTap: (){
+                  onTap: () {
                     pickGalleryImage(context);
                     Navigator.pop(context);
                   },
@@ -63,9 +64,10 @@ class ProfileController with ChangeNotifier{
         });
   }
 
-  Future pickGalleryImage(BuildContext context) async{
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery , imageQuality: 100);
-    if(pickedFile != null){
+  Future pickGalleryImage(BuildContext context) async {
+    final pickedFile =
+        await picker.pickImage(source: ImageSource.gallery, imageQuality: 100);
+    if (pickedFile != null) {
       _image = File(pickedFile.path);
       uploadImage(context);
       notifyListeners();
@@ -73,9 +75,10 @@ class ProfileController with ChangeNotifier{
     }
   }
 
-  Future pickCameraImage(BuildContext context) async{
-    final pickedFile = await picker.pickImage(source: ImageSource.camera , imageQuality: 100);
-    if(pickedFile != null){
+  Future pickCameraImage(BuildContext context) async {
+    final pickedFile =
+        await picker.pickImage(source: ImageSource.camera, imageQuality: 100);
+    if (pickedFile != null) {
       _image = File(pickedFile.path);
       uploadImage(context);
       notifyListeners();
@@ -83,42 +86,44 @@ class ProfileController with ChangeNotifier{
     }
   }
 
-  void uploadImage(BuildContext context) async{
-
+  void uploadImage(BuildContext context) async {
     setLoading(true);
 
-    firebase_storage.Reference storageRef = firebase_storage.FirebaseStorage.instance.ref('/profileImage${SessionController().userId}');
+    firebase_storage.Reference storageRef = firebase_storage
+        .FirebaseStorage.instance
+        .ref('/profileImage${SessionController().userId}');
 
-    firebase_storage.UploadTask uploadTask = storageRef.putFile(_image!.absolute);
+    firebase_storage.UploadTask uploadTask =
+        storageRef.putFile(_image!.absolute);
 
     await Future.value(uploadTask);
 
     var imageUrl = await storageRef.getDownloadURL();
 
-      ref.child(SessionController().userId.toString()).update({
-        'profileImg':imageUrl.toString(),
-      }).then((value) {
-        Utils.toastMessage("Profile Updated");
-        setLoading(false);
-        _image = null;
-      }).onError((error, stackTrace) {
-        Utils.toastMessage(error.toString());
-        setLoading(false);
-      });
+    ref.child(SessionController().userId.toString()).update({
+      'profileImg': imageUrl.toString(),
+    }).then((value) {
+      Utils.toastMessage("Profile Updated");
+      setLoading(false);
+      _image = null;
+    }).onError((error, stackTrace) {
+      Utils.toastMessage(error.toString());
+      setLoading(false);
+    });
   }
 
-  Future<void> showFirstNameDialogAlert(BuildContext context, String name){
+  Future<void> showFirstNameDialogAlert(BuildContext context, String name) {
     firstNameController.text = name;
     return showDialog(
         context: context,
-        builder: (context){
+        builder: (context) {
           return AlertDialog(
             title: const Center(child: Text("Update first name")),
             content: SingleChildScrollView(
               child: Column(
                 children: [
                   Form(
-                    key: _formKey,
+                      key: _formKey,
                       child: InputTextField(
                           myController: firstNameController,
                           focusNode: firstNameFocusNode,
@@ -134,75 +139,76 @@ class ProfileController with ChangeNotifier{
             ),
             actions: [
               TextButton(
-                  onPressed: (){
+                  onPressed: () {
                     Navigator.pop(context);
-                  }, child: const Text("Cancel")),
+                  },
+                  child: const Text("Cancel")),
               TextButton(
-                  onPressed: (){
-                    if(_formKey.currentState!.validate()){
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
                       ref.child(SessionController().userId.toString()).update({
-                        "firstName":firstNameController.text.toString(),
+                        "firstName": firstNameController.text.toString(),
                       }).then((value) {
                         Navigator.pop(context);
                         firstNameController.clear();
                       });
-                    }
-                    else{
+                    } else {
                       Utils.toastMessage("Enter first name");
                     }
-                  }, child: const Text("Update")),
+                  },
+                  child: const Text("Update")),
             ],
           );
         });
   }
 
-  Future<void> showLastNameDialogAlert(BuildContext context, String name){
+  Future<void> showLastNameDialogAlert(BuildContext context, String name) {
     lastNameController.text = name;
     return showDialog(
         context: context,
-        builder: (context){
+        builder: (context) {
           return AlertDialog(
             title: const Center(child: Text("Update Last name")),
             content: SingleChildScrollView(
               child: Column(
                 children: [
                   Form(
-                    key: _formKey,
+                      key: _formKey,
                       child: InputTextField(
-                      myController: lastNameController,
-                      focusNode: lastNameFocusNode,
-                      onFileSubmittedValue: (value){},
-                      onValidator: (value){
-                        return value.isEmpty ? "enter last name" : null;
-                      },
-                      keyBoardType: TextInputType.text,
-                      obscureText: false,
-                      hint: "Enter last name"))
+                          myController: lastNameController,
+                          focusNode: lastNameFocusNode,
+                          onFileSubmittedValue: (value) {},
+                          onValidator: (value) {
+                            return value.isEmpty ? "enter last name" : null;
+                          },
+                          keyBoardType: TextInputType.text,
+                          obscureText: false,
+                          hint: "Enter last name"))
                 ],
               ),
             ),
             actions: [
               TextButton(
-                  onPressed: (){
+                  onPressed: () {
                     Navigator.pop(context);
-                  }, child: const Text("Cancel")),
+                  },
+                  child: const Text("Cancel")),
               TextButton(
-                  onPressed: (){
-                    if(_formKey.currentState!.validate()){
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
                       ref.child(SessionController().userId.toString()).update({
-                        "lastName":lastNameController.text.toString(),
+                        "lastName": lastNameController.text.toString(),
                       }).then((value) {
                         Navigator.pop(context);
                         lastNameController.clear();
                       });
-                    }
-                    else{
+                    } else {
                       Utils.toastMessage("Enter last name");
                     }
-                  }, child: const Text("Update")),
+                  },
+                  child: const Text("Update")),
             ],
           );
         });
   }
-
 }

@@ -1,26 +1,28 @@
 import 'package:flutter/material.dart';
 
-class InputTextField extends StatelessWidget{
-
-  final TextEditingController  myController;
+class InputTextField extends StatelessWidget {
+  final TextEditingController myController;
   final FocusNode focusNode;
   final FormFieldSetter onFileSubmittedValue;
   final FormFieldValidator onValidator;
   final TextInputType keyBoardType;
   final String hint;
   final bool obscureText;
-  final bool enable , autoFocus;
+  final bool enable, autoFocus;
 
-  const InputTextField({Key? key,
-    required this.myController,
-    required this.focusNode,
-    required this.onFileSubmittedValue,
-    required this.onValidator,
-    required this.keyBoardType,
-    required this.obscureText,
-    required this.hint,
-    this.autoFocus = false,
-    this.enable = true}) : super(key: key);
+  const InputTextField(
+      {Key? key,
+      required this.myController,
+      required this.focusNode,
+      required this.onFileSubmittedValue,
+      required this.onValidator,
+      required this.keyBoardType,
+      required this.obscureText,
+      required this.hint,
+      this.autoFocus = false,
+      this.enable = true})
+      : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -34,28 +36,25 @@ class InputTextField extends StatelessWidget{
       keyboardType: keyBoardType,
       cursorColor: Colors.black54,
       cursorWidth: 1.5,
-      style: const TextStyle(fontSize: 20,color: Colors.black),
+      style: const TextStyle(fontSize: 20, color: Colors.black),
       decoration: InputDecoration(
         hintText: hint,
         enabled: enable,
         contentPadding: const EdgeInsets.all(10),
-        hintStyle: const TextStyle(color: Colors.black54 ,fontSize: 15 ,height: 0),
+        hintStyle:
+            const TextStyle(color: Colors.black54, fontSize: 15, height: 0),
         border: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          borderSide: BorderSide(color: Colors.black54)
-        ),
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide: BorderSide(color: Colors.black54)),
         focusedBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
-            borderSide: BorderSide(color: Colors.black)
-        ),
+            borderSide: BorderSide(color: Colors.black)),
         enabledBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
-            borderSide: BorderSide(color: Colors.black54)
-        ),
+            borderSide: BorderSide(color: Colors.black54)),
         errorBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
-            borderSide: BorderSide(color: Colors.red)
-        ),
+            borderSide: BorderSide(color: Colors.red)),
       ),
     );
   }

@@ -14,17 +14,19 @@ void main() async {
   );
   runApp(
     MultiProvider(
-        providers:[
-          ChangeNotifierProvider(create: (_) => SignUpController()),
-          ChangeNotifierProvider(create: (_) => LoginController()),
-          ChangeNotifierProvider(create: (_) => ProfileController()),
-        ],
-      child:const MyApp(),
-    ),);
+      providers: [
+        ChangeNotifierProvider(create: (_) => SignUpController()),
+        ChangeNotifierProvider(create: (_) => LoginController()),
+        ChangeNotifierProvider(create: (_) => ProfileController()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -36,10 +38,12 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.white,
         useMaterial3: true,
         appBarTheme: const AppBarTheme(
-          centerTitle: true,
-          color: Colors.white,
-          titleTextStyle: TextStyle(fontSize: 25 , fontWeight: FontWeight.w500 , color: Colors.black)
-        ),
+            centerTitle: true,
+            color: Colors.white,
+            titleTextStyle: TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.w500,
+                color: Colors.black)),
       ),
       home: const SplashScreen(),
     );
