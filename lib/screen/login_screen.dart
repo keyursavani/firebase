@@ -58,6 +58,21 @@ class LoginScreenState extends State<LoginScreen> {
                   getFormFieldWidget(),
                   getLoginButtonWidget(),
                   getLoginWithGoogleButtonWidget(),
+                  // FutureBuilder(
+                  //   future: Authentication.signInWithGoogle(context: context),
+                  //   builder: (context, snapshot) {
+                  //     if (snapshot.hasError) {
+                  //       return Text('Error initializing Firebase');
+                  //     } else if (snapshot.connectionState == ConnectionState.done) {
+                  //       return getLoginWithGoogleButtonWidget();
+                  //     }
+                  //     return CircularProgressIndicator(
+                  //       valueColor: AlwaysStoppedAnimation<Color>(
+                  //         Colors.black54,
+                  //       ),
+                  //     );
+                  //   },
+                  // ),
                   getBottomWidget(),
                 ],
               ),
