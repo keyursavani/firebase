@@ -1,10 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crud_operation/component/input_text_field.dart';
 import 'package:firebase_crud_operation/component/round_button.dart';
 import 'package:firebase_crud_operation/component/utils.dart';
 import 'package:firebase_crud_operation/provider/login_controller.dart';
 import 'package:firebase_crud_operation/screen/signup_screen.dart';
+import 'package:firebase_crud_operation/screen/userInfo_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'authentication.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -22,6 +26,7 @@ class LoginScreenState extends State<LoginScreen> {
   TextEditingController passwordController = TextEditingController();
   FocusNode emailFocusNode = FocusNode();
   FocusNode passwordFocusNode = FocusNode();
+  FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
   void dispose() {
@@ -52,6 +57,7 @@ class LoginScreenState extends State<LoginScreen> {
                   getTopWidget(),
                   getFormFieldWidget(),
                   getLoginButtonWidget(),
+                  getLoginWithGoogleButtonWidget(),
                   getBottomWidget(),
                 ],
               ),
@@ -124,6 +130,32 @@ class LoginScreenState extends State<LoginScreen> {
                 provider.login(
                     context, emailController.text, passwordController.text);
               }
+            }),
+      );
+    });
+  }
+  Widget getLoginWithGoogleButtonWidget()  {
+    return Consumer<LoginController>(builder: (context, provider, child) {
+      return Container(
+        margin: const EdgeInsets.only(top: 20),
+        child: RoundButton(
+            title: "Login with Google",
+            loading: provider.loading,
+            onPress: () async{
+              // if (_formKey.currentState!.validate()) {
+                // provider.login(
+                //     context, emailController.text, passwordController.text);
+                User? user =
+                    await Authentication.signInWithGoogle(context: context);
+                if(user != null){
+                  print("User Data :- $user");
+                 Navigator.push(context,
+                 MaterialPageRoute(builder: (context){
+                   return UserInfoScreen(user: user);
+                 }));
+                }
+                print("User Data :- $user");
+              // }
             }),
       );
     });
